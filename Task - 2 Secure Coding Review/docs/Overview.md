@@ -1,3 +1,5 @@
+*Author: Avinash K*
+
 # Project Overview
 
 This repository demonstrates a **secure‑coding review** workflow applied to a deliberately vulnerable Flask web application. It is intended for:

@@ -1,3 +1,5 @@
+*Author: Avinash K*
+
 # Remediation Report
 
 **Project:** Secure Coding Review and Vulnerability Assessment

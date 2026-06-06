@@ -1,3 +1,5 @@
+*Author: Avinash K*
+
 # Secure Coding Review and Vulnerability Assessment
 
 ## Overview
