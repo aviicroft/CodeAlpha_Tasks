@@ -1,0 +1,33 @@
+# *Author: Avinash K*
+
+# Configuration for Network Intrusion Detection System
+# All thresholds are per second unless otherwise noted.
+
+detection:
+  port_scan:
+    port_threshold: 20  # number of distinct ports accessed by same source within time_window
+    time_window: 5      # seconds
+  brute_force:
+    attempt_threshold: 10  # attempts to same destination port within time_window
+    time_window: 10
+  icmp_suspicious:
+    max_payload_size: 1000  # bytes
+  failed_connections:
+    rst_threshold: 15
+    time_window: 5
+  syn_flood:
+    syn_threshold: 100
+    time_window: 5
+
+logging:
+  csv_path: "logs/alerts.csv"
+
+email:
+  enabled: false
+  smtp_server: "smtp.example.com"
+  smtp_port: 587
+  use_tls: true
+  username: "user@example.com"
+  password: "password"
+  from_addr: "nids@example.com"
+  to_addrs: ["admin@example.com"]

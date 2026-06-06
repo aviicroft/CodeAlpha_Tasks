@@ -1,0 +1,56 @@
+# *Author: Avinash K*
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Network Intrusion Detection System Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f0f; color:#f0f0f0; margin:0; padding:2rem;}
+        .card {background: rgba(255,255,255,0.08); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; backdrop-filter: blur(8px);}
+        h1, h2 {margin:0 0 .5rem;}
+        #chartContainer {width:100%; max-width:800px; margin:auto;}
+    </style>
+</head>
+<body>
+    <h1>🛡️ NIDS Dashboard</h1>
+    <div class="card">
+        <h2>Total Alerts: <span id="total-alerts">0</span></h2>
+    </div>
+    <div class="card">
+        <h2>Alerts by Type</h2>
+        <canvas id="typeChart"></canvas>
+    </div>
+    <div class="card" id="chartContainer">
+        <h2>Alert Timeline (per minute)</h2>
+        <canvas id="timelineChart"></canvas>
+    </div>
+    <script>
+        async function refresh() {
+            const statsResp = await fetch('/api/stats');
+            const stats = await statsResp.json();
+            document.getElementById('total-alerts').textContent = stats.total_alerts;
+            const typeCtx = document.getElementById('typeChart').getContext('2d');
+            new Chart(typeCtx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(stats.alerts_by_type),
+                    datasets: [{data: Object.values(stats.alerts_by_type), backgroundColor: ['#ff6384','#36a2eb','#ffcd56','#4bc0c0','#9966ff'] }]
+                }
+            });
+            const timelineResp = await fetch('/api/timeline');
+            const timeline = await timelineResp.json();
+            const labels = timeline.map(p=>p.minute);
+            const data = timeline.map(p=>p.count);
+            const tlCtx = document.getElementById('timelineChart').getContext('2d');
+            new Chart(tlCtx, {
+                type: 'line',
+                data: {labels, datasets:[{label:'Alerts/min', data, borderColor:'#ff6384', fill:false}]},
+                options:{responsive:true, maintainAspectRatio:false}
+            });
+        }
+        refresh();
+        setInterval(refresh, 5000); // update every 5s
+    </script>
+</body>
+</html>
